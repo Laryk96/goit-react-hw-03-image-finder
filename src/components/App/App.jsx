@@ -1,12 +1,13 @@
 import { Component } from 'react';
 
-import { NotificationContainer, notify } from './helpers/notification';
+import { Container } from './App.styled';
+import { NotificationContainer, notify } from '../helpers/notification';
 import * as API from 'components/services/FetchAPI.js';
-import Searchbar from './Searchbar';
-import Title from './Title';
-import ImageGallery from './ImageGallery';
-import Button from './Button';
-import Loader from './Loader';
+import Searchbar from '../Searchbar';
+import Title from '../Title';
+import ImageGallery from '../ImageGallery';
+import Button from '../Button';
+import Loader from '../helpers/Loader';
 
 class App extends Component {
   state = {
@@ -51,7 +52,7 @@ class App extends Component {
     const { status } = this.state;
 
     return (
-      <div className="App">
+      <Container>
         <Searchbar onSubmit={this.handelSabmitForm} />
         <ImageGallery items={this.state.items} />
 
@@ -64,7 +65,7 @@ class App extends Component {
         {status === 'done' && <Button onClick={this.increasePage} />}
 
         <NotificationContainer />
-      </div>
+      </Container>
     );
   }
 }

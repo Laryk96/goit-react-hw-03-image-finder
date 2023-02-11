@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+import { Backdrop, ModalBody } from './Modal.styled';
 
 class Modal extends Component {
   componentDidMount() {
-    console.log('listen');
     window.addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -22,14 +24,20 @@ class Modal extends Component {
     const portal = document.getElementById('modal');
 
     return ReactDOM.createPortal(
-      <div className="Overlay" onClick={onClose}>
-        <div className="Modal">
+      <Backdrop onClick={onClose}>
+        <ModalBody>
           <img src={image} alt={alt} />
-        </div>
-      </div>,
+        </ModalBody>
+      </Backdrop>,
       portal
     );
   }
 }
+
+Modal.propTypes = {
+  alt: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Modal;

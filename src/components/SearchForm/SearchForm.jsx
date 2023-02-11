@@ -1,5 +1,14 @@
 import { FaSearch } from 'react-icons/fa';
-import { Formik, Form, Field } from 'formik';
+import PropTypes from 'prop-types';
+
+import {
+  Formik,
+  StyleForm as Form,
+  Input,
+  Button,
+  Label,
+} from './SearchForm.styled';
+
 const SearchForm = ({ onSubmit }) => {
   return (
     <Formik
@@ -9,19 +18,19 @@ const SearchForm = ({ onSubmit }) => {
         actions.resetForm();
       }}
     >
-      <Form className="SearchForm">
-        <button type="submit" className="SearchForm-button ">
-          <span className="SearchForm-button-label ">Search</span>
+      <Form>
+        <Button type="submit">
+          <Label>Search</Label>
           <FaSearch />
-        </button>
-        <Field
-          name="query"
-          className="SearchForm-input"
-          placeholder="Search image and photos"
-        ></Field>
+        </Button>
+        <Input name="query" placeholder="Search image and photos"></Input>
       </Form>
     </Formik>
   );
+};
+
+SearchForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchForm;

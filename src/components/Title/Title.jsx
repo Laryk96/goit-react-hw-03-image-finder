@@ -1,5 +1,11 @@
+import { Сaption } from './Title.styled';
+import PropTypes from 'prop-types';
+
 const Title = ({ children }) => {
-  return <h1>{children}</h1>;
+  return <Сaption>{children}</Сaption>;
 };
 
+Title.propTypes = {
+  children: PropTypes.string.isRequired,
+};
 export default Title;
