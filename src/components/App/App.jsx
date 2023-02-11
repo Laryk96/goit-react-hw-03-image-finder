@@ -25,10 +25,11 @@ class App extends Component {
         this.setState({ status: 'load' });
 
         const images = await API.getImages(this.state);
-        if (images.length !== 0) {
+
+        if (images.totalHits !== 0) {
           return this.setState(({ items }) => ({
-            items: [...items, ...images],
-            status: 'done',
+            items: [...items, ...images.hits],
+            status: images.totalHits > images.hits.length ? 'done' : 'not more',
           }));
         }
 
@@ -50,7 +51,6 @@ class App extends Component {
 
   render() {
     const { status } = this.state;
-
     return (
       <Container>
         <Searchbar onSubmit={this.handelSabmitForm} />
