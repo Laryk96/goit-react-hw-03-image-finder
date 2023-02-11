@@ -1,4 +1,6 @@
 import { Component } from 'react';
+
+import { NotificationContainer, notify } from './helpers/notification';
 import * as API from 'components/services/FetchAPI.js';
 import Searchbar from './Searchbar';
 import Title from './Title';
@@ -30,6 +32,7 @@ class App extends Component {
         }
 
         this.setState({ status: 'not found' });
+        notify(`Sorry, nothing was found on request "${query}"`);
       } catch (error) {
         console.log(error);
       }
@@ -50,10 +53,17 @@ class App extends Component {
     return (
       <div className="App">
         <Searchbar onSubmit={this.handelSabmitForm} />
-        {status === 'pending' && <Title>Let's find whatever you want !</Title>}
         <ImageGallery items={this.state.items} />
+
+        {(status === 'pending' && (
+          <Title>Let's find whatever you want !</Title>
+        )) ||
+          (status === 'not found' && <Title>Try again !</Title>)}
+
         {status === 'load' && <Loader />}
         {status === 'done' && <Button onClick={this.increasePage} />}
+
+        <NotificationContainer />
       </div>
     );
   }
