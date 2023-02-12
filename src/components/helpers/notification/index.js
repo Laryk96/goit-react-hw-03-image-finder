@@ -1,1 +1,5 @@
-export { notify, NotificationContainer } from './notification.jsx';
+export {
+  NotificationContainer,
+  notifyInfo,
+  notifyWarning,
+} from './notification.jsx';

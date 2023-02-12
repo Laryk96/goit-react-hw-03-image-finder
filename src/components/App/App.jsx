@@ -3,7 +3,7 @@ import { Component } from 'react';
 import * as API from 'components/services/FetchAPI.js';
 import Button from '../Button';
 import Loader from '../helpers/Loader';
-import { NotificationContainer, notify } from '../helpers/notification';
+import { NotificationContainer, notifyWarning } from '../helpers/notification';
 import ImageGallery from '../ImageGallery';
 import Searchbar from '../Searchbar';
 import Title from '../Title';
@@ -28,7 +28,9 @@ class App extends Component {
 
         if (images.totalHits === 0) {
           this.setState({ status: 'notFound' });
-          return notify(`Sorry, nothing was found on request "${query}"`);
+          return notifyWarning(
+            `Sorry, nothing was found on request "${query}"`
+          );
         }
 
         this.setState(({ items }) => ({
@@ -42,11 +44,12 @@ class App extends Component {
             status:
               images.totalHits > this.state.items.length
                 ? 'loadMore'
-                : 'notMore',
+                : 'noMore',
           });
         }, 10);
       } catch (error) {
-        console.log(error);
+        this.setState({ status: error.message });
+        return notifyWarning(error.message);
       }
     }
   }
