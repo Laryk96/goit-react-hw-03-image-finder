@@ -1,13 +1,13 @@
 import { Component } from 'react';
 
-import { Container } from './App.styled';
-import { NotificationContainer, notify } from '../helpers/notification';
 import * as API from 'components/services/FetchAPI.js';
-import Searchbar from '../Searchbar';
-import Title from '../Title';
-import ImageGallery from '../ImageGallery';
 import Button from '../Button';
 import Loader from '../helpers/Loader';
+import { NotificationContainer, notify } from '../helpers/notification';
+import ImageGallery from '../ImageGallery';
+import Searchbar from '../Searchbar';
+import Title from '../Title';
+import { Container } from './App.styled';
 
 class App extends Component {
   state = {
@@ -24,17 +24,27 @@ class App extends Component {
       try {
         this.setState({ status: 'load' });
 
-        const images = await API.getImages(this.state);
+        const images = await API.getImages({ query, page });
 
-        if (images.totalHits !== 0) {
-          return this.setState(({ items }) => ({
-            items: [...items, ...images.hits],
-            status: images.totalHits > images.hits.length ? 'done' : 'not more',
-          }));
+        if (images.totalHits === 0) {
+          this.setState({ status: 'notFound' });
+          return notify(`Sorry, nothing was found on request "${query}"`);
         }
 
-        this.setState({ status: 'not found' });
-        notify(`Sorry, nothing was found on request "${query}"`);
+        this.setState(({ items }) => ({
+          items: [...items, ...images.hits],
+        }));
+
+        // Скорее всего костыль,  потом пофиксить
+        setTimeout(() => {
+          console.log(this.state.items.length);
+          this.setState({
+            status:
+              images.totalHits > this.state.items.length
+                ? 'loadMore'
+                : 'notMore',
+          });
+        }, 10);
       } catch (error) {
         console.log(error);
       }
@@ -59,10 +69,10 @@ class App extends Component {
         {(status === 'pending' && (
           <Title>Let's find whatever you want !</Title>
         )) ||
-          (status === 'not found' && <Title>Try again !</Title>)}
+          (status === 'notFound' && <Title>Try again !</Title>)}
 
         {status === 'load' && <Loader />}
-        {status === 'done' && <Button onClick={this.increasePage} />}
+        {status === 'loadMore' && <Button onClick={this.increasePage} />}
 
         <NotificationContainer />
       </Container>
